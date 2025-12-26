@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Get the correct npm install command instantly. Search any package, select your package manager, copy the command.">
+  <title>npm Command Builder — Correct Install Commands, Instantly</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap"
+    rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- Skip Link -->
+  <a href="#search" class="skip-link">Skip to search</a>
+
+  <div class="noise"></div>
+
+  <div class="container">
+    <header class="header">
+      <div class="logo">
+        <span class="logo-symbol">▸</span>
+        <span class="logo-text">npmcmd</span>
+      </div>
+      <div class="registry-badge">
+        <span class="badge-dot"></span>
+        <span class="badge-text">verified from npm registry</span>
+      </div>
+    </header>
+
+    <main class="main">
+      <section class="search-section">
+        <h1 class="headline">Get the correct install command.</h1>
+        <p class="subheadline">Search any npm package. Get the exact command with the latest version.</p>
+
+        <div class="search-container">
+          <div class="search-input-wrapper">
+            <label for="search" class="visually-hidden">Search npm packages</label>
+            <input type="text" id="search" class="search-input"
+              placeholder="Search packages... (e.g., react, lodash, express)" autocomplete="off" spellcheck="false">
+            <div class="search-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+              </svg>
+            </div>
+            <div class="search-loader" aria-hidden="true"></div>
+            <ul class="suggestions-list hidden" role="listbox" aria-label="Package suggestions"></ul>
+          </div>
+          <button type="button" class="generate-btn" id="generateBtn">
+            Generate
+          </button>
+        </div>
+
+        <div class="options-row">
+          <div class="option-group">
+            <label class="option-label">Package Manager</label>
+            <div class="toggle-group" role="radiogroup" aria-label="Package manager selection">
+              <button type="button" class="toggle-btn active" data-manager="npm" role="radio"
+                aria-checked="true">npm</button>
+              <button type="button" class="toggle-btn" data-manager="yarn" role="radio"
+                aria-checked="false">yarn</button>
+              <button type="button" class="toggle-btn" data-manager="pnpm" role="radio"
+                aria-checked="false">pnpm</button>
+              <button type="button" class="toggle-btn" data-manager="bun" role="radio" aria-checked="false">bun</button>
+            </div>
+          </div>
+
+          <div class="option-group">
+            <label class="option-label">Install Type</label>
+            <div class="toggle-group" role="radiogroup" aria-label="Dependency type selection">
+              <button type="button" class="toggle-btn active" data-dep="prod" role="radio"
+                aria-checked="true">dependency</button>
+              <button type="button" class="toggle-btn" data-dep="dev" role="radio"
+                aria-checked="false">devDependency</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="result-section" aria-live="polite" aria-atomic="true">
+        <div class="result-placeholder">
+          <div class="placeholder-icon">⌘</div>
+          <p class="placeholder-text">Your command will appear here</p>
+        </div>
+
+        <div class="result-content hidden">
+          <div class="package-info">
+            <div class="package-header">
+              <h2 class="package-name"></h2>
+              <span class="package-version"></span>
+            </div>
+            <p class="package-description"></p>
+            <div class="package-meta">
+              <span class="meta-item maintainer"></span>
+              <span class="meta-divider">•</span>
+              <span class="meta-item updated"></span>
+            </div>
+          </div>
+
+          <div class="command-block">
+            <div class="deprecation-warning hidden">
+              <span class="warning-icon">⚠</span>
+              <span class="warning-text">This package is deprecated</span>
+            </div>
+            <pre class="command-output"><code class="command-text"></code></pre>
+            <button type="button" class="copy-btn" aria-label="Copy command to clipboard">
+              <span class="copy-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+              </span>
+              <span class="copy-text">Copy</span>
+              <span class="copied-text">Copied!</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="error-content hidden">
+          <div class="error-icon">✕</div>
+          <p class="error-text">Package not found</p>
+        </div>
+      </section>
+
+      <aside class="history-section hidden">
+        <div class="history-header">
+          <h3 class="history-title">Recent</h3>
+          <button type="button" class="history-clear" aria-label="Clear history">Clear</button>
+        </div>
+        <ul class="history-list" role="list"></ul>
+      </aside>
+    </main>
+
+    <footer class="footer">
+      <div class="keyboard-hints">
+        <span class="hint"><kbd>↵</kbd> search</span>
+        <span class="hint"><kbd>⌘ + C</kbd> copy</span>
+      </div>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
