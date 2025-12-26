@@ -113,17 +113,23 @@
               <span class="warning-text">This package is deprecated</span>
             </div>
             <pre class="command-output"><code class="command-text"></code></pre>
-            <button type="button" class="copy-btn" aria-label="Copy command to clipboard">
-              <span class="copy-icon">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                  stroke-linecap="round" stroke-linejoin="round">
-                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                </svg>
-              </span>
-              <span class="copy-text">Copy</span>
-              <span class="copied-text">Copied!</span>
-            </button>
+            <div class="command-actions">
+              <button type="button" class="copy-btn" aria-label="Copy command to clipboard">
+                <span class="copy-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                  </svg>
+                </span>
+                <span class="copy-text">Copy</span>
+                <span class="copied-text">Copied!</span>
+              </button>
+              <button type="button" class="add-clipboard-btn" id="addToClipboardBtn">
+                <span class="btn-icon">+</span>
+                <span>Add to Clipboard</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -140,6 +146,22 @@
         </div>
         <ul class="history-list" role="list"></ul>
       </aside>
+
+      <section class="clipboard-section hidden">
+        <div class="clipboard-header">
+          <div class="clipboard-title-group">
+            <h3 class="clipboard-title">Clipboard</h3>
+            <span class="clipboard-count">0 items</span>
+          </div>
+          <div class="clipboard-actions">
+            <button type="button" class="clipboard-copy-all" id="copyAllBtn">Copy All</button>
+            <button type="button" class="clipboard-clear" id="clearClipboardBtn">Clear</button>
+          </div>
+        </div>
+        <div class="clipboard-list-wrapper">
+          <ul class="clipboard-list" role="list"></ul>
+        </div>
+      </section>
     </main>
 
     <footer class="footer">

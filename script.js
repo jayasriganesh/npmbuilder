@@ -14,6 +14,7 @@
         dependencyType: 'prod',
         currentPackage: null,
         history: [],
+        clipboard: [],
         isLoading: false,
         suggestions: [],
         selectedSuggestionIndex: -1
@@ -53,7 +54,13 @@
         historyList: document.querySelector('.history-list'),
         historyClear: document.querySelector('.history-clear'),
         suggestionsList: document.querySelector('.suggestions-list'),
-        generateBtn: document.getElementById('generateBtn')
+        generateBtn: document.getElementById('generateBtn'),
+        addToClipboardBtn: document.getElementById('addToClipboardBtn'),
+        clipboardSection: document.querySelector('.clipboard-section'),
+        clipboardList: document.querySelector('.clipboard-list'),
+        clipboardCount: document.querySelector('.clipboard-count'),
+        copyAllBtn: document.getElementById('copyAllBtn'),
+        clearClipboardBtn: document.getElementById('clearClipboardBtn')
     };
 
     // ========================================
@@ -315,19 +322,19 @@
         if (!state.currentPackage) return;
 
         const command = elements.commandText.textContent;
+        await copyTextToClipboard(command, elements.copyBtn);
+    }
 
+    async function copyTextToClipboard(text, button) {
         try {
-            await navigator.clipboard.writeText(command);
-
-            elements.copyBtn.classList.add('copied');
-
+            await navigator.clipboard.writeText(text);
+            button.classList.add('copied');
             setTimeout(() => {
-                elements.copyBtn.classList.remove('copied');
+                button.classList.remove('copied');
             }, 2000);
         } catch (e) {
-            // Fallback for older browsers
             const textArea = document.createElement('textarea');
-            textArea.value = command;
+            textArea.value = text;
             textArea.style.position = 'fixed';
             textArea.style.opacity = '0';
             document.body.appendChild(textArea);
@@ -335,11 +342,59 @@
             document.execCommand('copy');
             document.body.removeChild(textArea);
 
-            elements.copyBtn.classList.add('copied');
+            button.classList.add('copied');
             setTimeout(() => {
-                elements.copyBtn.classList.remove('copied');
+                button.classList.remove('copied');
             }, 2000);
         }
+    }
+
+    function addToClipboard() {
+        if (!state.currentPackage) return;
+
+        const command = elements.commandText.textContent;
+
+        // Prevent duplicates
+        if (!state.clipboard.includes(command)) {
+            state.clipboard.push(command);
+            renderClipboard();
+        }
+    }
+
+    function removeFromClipboard(index) {
+        state.clipboard.splice(index, 1);
+        renderClipboard();
+    }
+
+    function clearClipboard() {
+        state.clipboard = [];
+        renderClipboard();
+    }
+
+    async function copyAllFromClipboard() {
+        if (state.clipboard.length === 0) return;
+
+        const allCommands = state.clipboard.join('\n');
+        await copyTextToClipboard(allCommands, elements.copyAllBtn);
+    }
+
+    function renderClipboard() {
+        if (state.clipboard.length === 0) {
+            elements.clipboardSection.classList.add('hidden');
+            return;
+        }
+
+        elements.clipboardSection.classList.remove('hidden');
+        elements.clipboardCount.textContent = `${state.clipboard.length} item${state.clipboard.length === 1 ? '' : 's'}`;
+
+        elements.clipboardList.innerHTML = state.clipboard
+            .map((command, index) => `
+                <li class="clipboard-item">
+                    <span class="clipboard-item-text">${command}</span>
+                    <button type="button" class="clipboard-item-remove" data-index="${index}" aria-label="Remove item">×</button>
+                </li>
+            `)
+            .join('');
     }
 
     // ========================================
@@ -603,6 +658,16 @@
         });
 
         elements.copyBtn.addEventListener('click', copyToClipboard);
+        elements.addToClipboardBtn.addEventListener('click', addToClipboard);
+
+        elements.copyAllBtn.addEventListener('click', copyAllFromClipboard);
+        elements.clearClipboardBtn.addEventListener('click', clearClipboard);
+        elements.clipboardList.addEventListener('click', (e) => {
+            const removeBtn = e.target.closest('.clipboard-item-remove');
+            if (removeBtn) {
+                removeFromClipboard(parseInt(removeBtn.dataset.index, 10));
+            }
+        });
 
         elements.historyList.addEventListener('click', handleHistoryClick);
         elements.historyClear.addEventListener('click', clearHistory);

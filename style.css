@@ -578,10 +578,16 @@ body {
   white-space: nowrap;
 }
 
-.copy-btn {
+.command-actions {
   position: absolute;
   top: var(--space-3);
   right: var(--space-3);
+  display: flex;
+  gap: var(--space-2);
+}
+
+.copy-btn,
+.add-clipboard-btn {
   display: flex;
   align-items: center;
   gap: var(--space-2);
@@ -596,12 +602,14 @@ body {
   transition: all var(--transition-fast);
 }
 
-.copy-btn:hover {
+.copy-btn:hover,
+.add-clipboard-btn:hover {
   color: var(--text-primary);
   border-color: var(--border-focus);
 }
 
-.copy-btn:focus-visible {
+.copy-btn:focus-visible,
+.add-clipboard-btn:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
@@ -609,6 +617,11 @@ body {
 .copy-btn.copied {
   color: var(--accent);
   border-color: var(--accent-dim);
+}
+
+.add-clipboard-btn .btn-icon {
+  font-size: 1.1em;
+  line-height: 1;
 }
 
 .copy-btn .copy-icon {
@@ -719,6 +732,132 @@ body {
 .history-item:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+
+/* --- Clipboard Section --- */
+.clipboard-section {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--space-5);
+  animation: fadeSlideDown 0.6s ease 0.35s backwards;
+}
+
+.clipboard-section.hidden {
+  display: none;
+}
+
+.clipboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-4);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--border);
+}
+
+.clipboard-title-group {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+}
+
+.clipboard-title {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.clipboard-count {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+}
+
+.clipboard-actions {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.clipboard-copy-all {
+  padding: var(--space-2) var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--bg-primary);
+  background: var(--accent);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.clipboard-copy-all:hover {
+  background: var(--accent-dim);
+  transform: translateY(-1px);
+}
+
+.clipboard-clear {
+  padding: var(--space-2) var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.clipboard-clear:hover {
+  color: var(--text-primary);
+  border-color: var(--border-focus);
+}
+
+.clipboard-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  list-style: none;
+}
+
+.clipboard-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-3) var(--space-4);
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  animation: fadeIn 0.3s ease;
+}
+
+.clipboard-item-text {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.clipboard-item-remove {
+  background: none;
+  border: none;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  font-size: var(--text-xl);
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 var(--space-2);
+  transition: color var(--transition-fast);
+}
+
+.clipboard-item-remove:hover {
+  color: var(--error);
 }
 
 /* --- Footer --- */
@@ -883,15 +1022,24 @@ kbd {
     gap: var(--space-2);
   }
 
-  .copy-btn {
+  .command-actions {
     position: static;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-4);
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border);
+  }
+
+  .copy-btn,
+  .add-clipboard-btn {
     width: 100%;
     justify-content: center;
-    margin: var(--space-3);
-    margin-top: 0;
+    padding: var(--space-3);
   }
 
   .command-output {
-    padding-bottom: 0;
+    padding-bottom: var(--space-2);
   }
 }
